@@ -1,0 +1,292 @@
+<%@page import="uuu.es.entity.OrderStatusLog"%>
+<%@page import="java.util.List"%>
+<%@page import="uuu.es.entity.Customer"%>
+<%@page import="uuu.es.service.OrderService"%>
+<%@page import="uuu.es.entity.Order"%>
+<%@page import="uuu.es.entity.PaymentType"%>
+<%@page import="uuu.es.entity.OrderItem"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="../favicon/favicon-16x16.png">
+		<link rel="manifest" href="../favicon/site.webmanifest">
+		<link rel="mask-icon" href="../favicon/safari-pinned-tab.svg" color="#5bbad5">
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="theme-color" content="#ffffff">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="UTF-8">
+		<title>EraSelect 檢視訂單明細</title>
+		<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/style/es.css">
+		<script src="https://code.jquery.com/jquery-3.0.0.js" integrity="sha256-jrPLZ+8vDxt2FnE1zvZXCkCcebI/C8Dt5xyaQBjxQIo=" crossorigin="anonymous"></script>
+		<script type="text/javascript">
+		
+		</script>
+		<style type="text/css">
+/* ---------------商品明細--------------- */
+		#cartDetails {
+		  font-family: Arial, Helvetica, sans-serif;
+		  border-collapse: collapse;
+		  width: 85%;
+		  margin:auto;
+		}
+		#cartDetails td, #cartDetails th {
+		  border: 1px solid #ddd;
+		  padding: 8px;
+		}
+		#cartDetails tr:nth-child(even){background-color: #f2f2f2;}
+		#cartDetails tr:hover {background-color: #ddd;}
+		#cartDetails tbody input[type=number]{width:5ex}
+		#cartDetails caption {
+		  padding-top: 12px;
+		  padding-bottom: 12px;
+/* 		  text-align: left; */
+		  background-color: silver;
+		  color: white;
+		}
+		.cartImg{
+			width:40px;
+			margin:1px;
+			vertical-align: middle;
+		}
+		#deleteImg{
+			width:20px;
+			cursor: pointer;
+		}
+		.listPrice{
+			text-decoration: line-through;
+			color: #75757575;
+		}
+		.discountPrice{
+			color: rgb(174, 0, 0);
+		}
+		.discountString{
+			font-size: smaller;
+		}
+		.lastTr{
+			text-align: right;
+		}
+		.productName{font-weight: bold}
+/* ---------------商品明細--------------- */
+		.orderDetail,summary{
+			width: 85%;
+			margin:20px auto;
+		}
+		.orderInfo{
+			display:inline-block;
+			width: 20em;
+			border-bottom: 1px solid black; 
+		}
+		.orderDetail fieldset label{
+			display:inline-block;
+			min-width:3.5em;
+		}
+		.topInfo{
+			display:inline-block;
+			min-width:25em;
+			border-bottom: 1px solid black; 
+		}
+		.labelWidth{
+			display:inline-block;
+			min-width:8em;
+		}
+		.spanWidth{
+			display:inline-block;
+			width: 30em;
+		}
+		#statusListDiv{margin: auto;width:310px}
+		.statusSpan{
+			display: inline-block;
+			width:3.5em;
+			height: 2.75em;
+			padding-top:1em; 
+			font-size: smaller;
+			background-color: orange;
+			color:white;
+			text-align: center;
+			border-radius: 1ex
+		}
+		.notYet{background-color:lightgray}
+		#totalAmountWithFee{font-size: large;font-weight: bolder;color:dimgray;}
+		h3{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		</style>
+	
+	</head>
+<body>
+	<jsp:include page="/subviews/header.jsp"><jsp:param value="" name="subheader"/></jsp:include>
+	<article>
+		<%	
+			Customer member = (Customer)session.getAttribute("member");
+			String orderId = request.getParameter("orderId");
+				Order order = null;
+				List<OrderStatusLog> statusLogList = null;
+				OrderService oService = new OrderService();
+				if(orderId!=null){
+					order = oService.getOrderById(member, orderId);
+					if(order!=null){
+			             statusLogList = oService.getOrderStatusLog(orderId);
+			        }
+				}
+		%>
+		<% if(order==null){%>
+			<h3>查無此訂單!</h3>			
+		<% }else{%>
+			<div class="orderDetail">
+				<p>					
+					<span class="spanWidth">
+						<label class="labelWidth">訂單編號: </label><span class="topInfo"><%= order.getId() %></span>
+					</span>
+					<span class="spanWidth">
+						<label class="labelWidth">訂購時間: </label><span class="topInfo"><%= order.getCreatedDate()%>, <%= order.getCreatedTime() %></span>
+					</span>
+ 					<span class="spanWidth">
+ 						<label class="labelWidth">處理狀態: </label><span class="topInfo"><%= order.getStatus() %> (<%= order.getStatusDescription() %>)</span>
+ 					</span>
+				</p>
+				<p>
+					<span id="shippingTypeSpan" class="spanWidth">
+						<label class="labelWidth">貨運方式: </label>
+						<span class="topInfo"><%= order.getShippingType().getDescription() %></span>
+					</span>
+					<% if(order.getShippingNote()!=null) {%>
+						<span style="color:gray;font-size:smaller"><%=order.getShippingNote() %></span>
+					<% } %>
+					
+					<span id="paymentTypeSpan" class="spanWidth">
+						<label class="labelWidth">付款方式: </label>
+						<span class="topInfo"><%= order.getPaymentType().getDescription() %></span>
+					</span>		
+					<% if(order.getStatus()==0 && order.getPaymentType()==PaymentType.ATM){ %>
+					<a href="atm_transfered.jsp?orderId=<%=order.getId()%>">通知已轉帳</a>
+					<% } %>
+					<span class="spanWidth"> 
+						<label class="labelWidth">總金額(含物流費): 
+							<span class="topInfo">
+								<span id="totalAmountWithFee"><%= order.getTotalAmountWithFee() %></span>元
+							</span>
+						</label>
+					</span>				
+				</p>		
+				<div id="statusListDiv"><!-- 狀態列，可不做 -->
+					<span class='statusSpan' title="<%= order.getCreatedDate()%>, <%= order.getCreatedTime() %>"><%= order.getStatusDescription(0) %></span> > 
+					<% if(order.getPaymentType()==PaymentType.ATM || order.getPaymentType()==PaymentType.CARD){%>
+					<span class='statusSpan notYet orderStatus1 orderStatus2' title="2024-10-11, 14:05:18"><%= order.getStatusDescription(2)%></span> >
+					<% } %>
+					<span class='statusSpan notYet orderStatus3'><%= order.getStatusDescription(3)%></span> >					
+					<% if(order.getPaymentType()==PaymentType.SHOP || order.getPaymentType()==PaymentType.STORE){%>
+					<span class='statusSpan notYet orderStatus4' title="2024-10-11, 14:05:18"><%= order.getStatusDescription(4)%></span> >
+					<% } %>
+					
+					<span class='statusSpan notYet orderStatus5'><%= order.getStatusDescription(5)%></span> >
+					<span class='statusSpan notYet orderStatus6 '><%= order.getStatusDescription(6)%></span>
+				</div>
+			
+				<fieldset>
+					<legend>收件人</legend>
+					<p>
+						<div>
+							<label>姓名:</label>
+							<span class="orderInfo"><%= order.getRecipientName() %></span>
+						</div>
+					</p>
+					<p>
+						<div>
+							<label>手機:</label>
+							<span class="orderInfo"><%= order.getRecipientPhone() %></span>
+						</div>
+					</p>
+					<p>
+						<div>
+							<label>Email:</label>
+							<span class="orderInfo"><%= order.getRecipientEmail() %></span>
+						</div>
+					</p>
+					<p>
+						<div>
+							<label>地址:</label>
+							<span class="orderInfo"><%= order.getShippingAddress() %></span>
+						</div>
+					</p>
+				</fieldset>
+				
+			</div>
+				
+			<summary>
+				總金額: 
+				<span id="totalAmountWithFee">NT$<%= order.getTotalAmount() %></span>，共<%= order.getTotalQuantity() %>件
+			</summary>
+			<table id="cartDetails">
+				<caption>購物明細</caption>
+				<thead>
+					<tr>
+						<td>編號</td>
+						<td>產品名稱</td>
+						<td>顏色/規格</td>
+						<td> 定價 / 折扣 / 售價 </td>
+						<td>數量</td>
+						<td>小計</td>
+					</tr>
+				</thead>
+				<tbody>
+				<% for(OrderItem item:order.getOrderItemsSet()){ %>			
+					<tr>
+						<td><%= item.getProductId()%></td>
+						<td>
+							<a href="../product_detail.jsp?productId=9">
+								<img class="cartImg" src="<%= item.getPhotoUrl()%>">
+								<span class="productName"><%= item.getProductName()%></span>
+							</a>
+						</td>
+						<td>
+							 <%= item.getColorName()%> <%= item.getSpecName()%>
+						</td>
+						<td>
+							<span class="discountPrice2">NT$<%= item.getPrice()%></span>
+						</td>
+						<td>
+							<%= item.getQuantity()%>
+						</td>
+						<td>
+							<%=item.getAmount() %>
+						</td>
+						
+					</tr>
+				<% } %>
+				</tbody>
+				
+				<tfoot>
+					<tr class="lastTr">
+						<td colspan="4">共<%= order.size()%>項</td>
+						<td colspan="1"><%= order.getTotalQuantity()%>件</td>
+						<td colspan="1">總金額: <span id="totalAmount"><%= order.getTotalAmount()%></span></td>
+					</tr>
+				</tfoot>
+			</table>
+		<% } %>
+	</article>
+	<%@include file="/subviews/footer.jsp" %>
+</body>
+<script>
+    $(setStatus); //帶入狀態log資料
+    function setStatus(){
+         <% if(statusLogList!=null && statusLogList.size()>0){
+             for(OrderStatusLog log:statusLogList){%>
+             	  //alert(<%= log.getStatus() %>); //for test
+                  $(".orderStatus<%= log.getStatus() %>").removeClass("notYet");                      
+                  $(".orderStatus<%= log.getStatus() %>").attr("title", "<%= log.getLogTime()%>");
+                  if($(".orderStatus<%= log.getStatus()-1 %>").hasClass("notYet")){
+                      $(".orderStatus<%= log.getStatus()-1 %>").removeClass("notYet");
+                  }
+         <%  }}%>
+    }
+    //自訂的javascript function
+</script>
+</html>

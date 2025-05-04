@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Arrow Change</title>
+		<script src="https://code.jquery.com/jquery-3.0.0.js" integrity="sha256-jrPLZ+8vDxt2FnE1zvZXCkCcebI/C8Dt5xyaQBjxQIo=" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		var index = 0;
+		$(document).ready(init);
+		function init(){
+			$(".next").click(nextHandler);
+			$(".prev").click(prevHandler);
+		}
+		function nextHandler(){
+			index < 2 ? index++ : index = 2;
+			change();
+		}
+		function prevHandler(){
+			index > 0 ? index-- : index = 0;
+			change();
+		}
+		function change(){
+			$(".hide").animate({"marginLeft": -index*400+"px"},300);
+			console.log(index);
+			$(".pos").removeClass("show");
+			$(".pos:eq("+index+")").addClass("show");
+		}
+	</script>
+	<style>
+		body {
+			background: silver;
+		}
+		.outer{
+			width: 400px;
+			height: 200px;
+			overflow: hidden;
+		}
+		.outer * {
+			float: left;
+		}
+		.hide{
+			width: 1200px;
+			height: 200px;
+		}
+		.inner{
+			width: 400px;
+			height: 200px;
+			float:left;
+		}
+		.inner1{
+			background: pink;
+		}
+		.inner2{
+			background: lightgreen;
+		}
+		.inner3{
+			background: lightblue;
+		}
+		button {
+			width: 100px;
+			height: 100px;
+		}
+		.clear{
+			clear:both;
+		}
+		.pos{
+			font-size: 3em;
+		}
+		.show{
+			color: red;
+		}
+	</style>
+
+</head>
+
+<body>
+	<button class="prev">Prev</button>
+	<button class="next">Next</button>
+
+	<div class="outer">
+		<div class="hide">
+			<div class="inner inner1">A</div>
+			<div class="inner inner2">B</div>
+			<div class="inner inner3">C</div>	
+		</div>
+	</div>
+	<span class="pos show">A</span> <span class="pos">B</span> <span class="pos">C</span>
+	<br class="clear">
+	<hr>
+</body>
+
+</html>

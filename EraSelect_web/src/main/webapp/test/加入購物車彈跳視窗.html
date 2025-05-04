@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>cart</title>
+	<style>
+		#animate{
+			width: 0px;
+			height: 50px;
+			background: orange;
+			background: #757575;
+			color: white;
+			border-radius: 25px;
+			text-align: center;
+			font-size: 30px;
+			line-height: 50px;
+			margin: auto;
+			overflow: hidden;
+			white-space: pre;
+		}
+	</style>
+	<script src="https://code.jquery.com/jquery-3.0.0.js" integrity="sha256-jrPLZ+8vDxt2FnE1zvZXCkCcebI/C8Dt5xyaQBjxQIo=" crossorigin="anonymous"></script>
+	<script>
+		$(document).ready(init);
+		function init() {
+			$("#add").click(addHandler);
+		}
+		function addHandler(){
+			$("#animate").animate({"width":"400px"},1200)
+						.delay(2000)
+						.animate({"width":"0px"},1200);
+		}
+		//$("#animate").css("backgroundImage","url(abc.jpg)");
+
+	</script>
+</head>
+
+<body>
+	
+	<button id="add">Add to cart!</button>
+	<div id="animate">加入購物車成功!</div>
+</body>
+
+</html>

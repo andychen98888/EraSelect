@@ -1,0 +1,212 @@
+
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Accordion</title>
+	<style>
+		#myAccordion {
+			width: 300px;
+			margin: auto;
+		}
+
+		#myAccordion>* {
+/* 			border: 1px solid gray; */
+ 			margin: 0px; 
+		}
+		
+		.accordionTitle {
+			cursor: pointer;
+			font-size: 2em;
+			text-align: center;
+			color: white;
+/* 			border: 1px solid gray; */
+		}
+
+		.accordionContent {
+/* 			background-color: #eee; */
+			overflow: hidden;
+			height: 0px;
+			transition: height 0.4s ease-out;
+		}
+
+		.contentHeight {
+			height: 300px;
+			/*height: auto;*/
+		}
+
+		.accordionContent img {
+			margin-right: 20px;
+			display: inline-block;
+			height: 150px;
+			width: 150px;
+			border: 1px gray solid;
+		}
+
+		.accordionContent p {
+			font-size: 1.2em;
+/* 			display: inline-block; */
+			width: calc(100% - 200px);
+		}
+		.showHide{
+			height:0px;
+		}
+		
+		#accordionDiv{
+			display: inline-block;
+			width: 116px;
+			height: 20px;
+			margin: 5px;
+			padding: 5px 10px;
+			border: 1px gray solid;
+ 			text-align: center; 
+ 			line-height: 20px;
+			cursor: pointer;
+			font-size: 15px;
+		}
+	</style>
+	<script src="https://code.jquery.com/jquery-3.0.0.js" integrity="sha256-jrPLZ+8vDxt2FnE1zvZXCkCcebI/C8Dt5xyaQBjxQIo=" crossorigin="anonymous"></script>
+	<script>
+		/*for (var i = 0; i< 10; i+=1){
+		if(i == 3) alert("Yes "+ i/10)
+		}*/
+		//手風琴標題元件正常背景顏色
+		var accordionBgNormal = "#999";
+		//手風琴標題元件選取背景顏色
+		var accordionBgSelected = "#333";
+		//手風琴標題元件滑鼠滑過背景顏色
+		var accordionBgHover = "#666";
+		//儲存目前選取的索引號碼
+		var accordionIndex = 0;
+
+		$(document).ready(init);
+		function init() {
+			$(".accordionContent").css("height", "250px"); //一開始全部打開
+			$(".accordionTitle").click(accordionTitleClickHandler);
+			$(".accordionTitle").mouseenter(accordionTitleMouseenterHandler);
+			$(".accordionTitle").mouseleave(accordionTitleMouseleaveHandler);
+			$(".accordionTitle").css("backgroundColor", accordionBgNormal);
+			$(".accordionTitle").each(function (index){
+				$(this).attr("accordionIndex", index);
+			})
+			$(".accordionTitle:eq("+accordionIndex+")").css("backgroundColor", accordionBgSelected);
+			$(".accordionContent:eq("+accordionIndex+")").css("height","250px");
+		}
+		function accordionTitleClickHandler(){
+			accordionIndex = $(this).attr("accordionIndex");
+			$(".accordionTitle").css("backgroundColor", accordionBgNormal);
+			$(this).css("backgroundColor", accordionBgSelected);
+			//$(".accordionContent").css("height","0px"); //一開始收合
+			//$(this).next().css("height","300px");
+			
+			if($(this).next().css("height") > "150px"){ //if($(this).next().css("height") == "300px")因為二進位問題 沒辦法滿足等於300約299..... 縮放畫面會時會出錯
+				$(this).next().css("height","0px");
+			}else{
+				$(this).next().css("height","250px");
+			}
+			
+		}
+		function accordionTitleMouseenterHandler(){
+			if($(this).attr("accordionIndex") != accordionIndex){
+				$(this).css("backgroundColor", accordionBgHover);
+			}
+		}
+		function accordionTitleMouseleaveHandler(){
+			if($(this).attr("accordionIndex") != accordionIndex){
+				$(this).css("backgroundColor", accordionBgNormal);
+			}
+		}
+
+	</script>
+</head>
+
+<body>	
+	<!--Accordion最外圍元件 id="myAccordion"-->
+	<div id="myAccordion">
+		<!--標題元件　class="accordionTitle"-->
+		<h3 class="accordionTitle">BRAND</h3>
+		<!--內容元件　class="accordionContent"-->
+		<div class="accordionContent">
+			<span id="accordionDiv">AKIMBO</span>
+			<span id="accordionDiv">ACNE STUDIOS</span>
+			<span id="accordionDiv">Birken</span>
+			<span id="accordionDiv">CARHARTT</span>
+			<span id="accordionDiv">Danner Mountain</span>
+			<span id="accordionDiv">en route</span>
+			<span id="accordionDiv">IDA</span>
+			<span id="accordionDiv">LV</span>
+			<span id="accordionDiv">Rick Owens</span>
+			<span id="accordionDiv">Salomon</span>
+			<span id="accordionDiv">STUSSY</span>
+			<span id="accordionDiv">TWOJEYS</span>		
+		</div>
+
+		<h3 class="accordionTitle">DEPARTMENT</h3>
+		<div class="accordionContent">
+			<span id="accordionDiv">BAGS</span>
+			<span id="accordionDiv">BARCELET</span>
+			<span id="accordionDiv">CAPS</span>
+			<span id="accordionDiv">DENIM</span>
+			<span id="accordionDiv">HOOIES</span>
+			<span id="accordionDiv">JACKETS</span>
+			<span id="accordionDiv">JORTS</span>
+			<span id="accordionDiv">KNITS</span>
+			<span id="accordionDiv">NACKLACE</span>
+			<span id="accordionDiv">RINGS</span>
+			<span id="accordionDiv">SHORTS</span>
+			<span id="accordionDiv">T-SHIRTS</span>
+		</div>
+
+		<h3 class="accordionTitle">COLOR</h3>
+		<div class="accordionContent">
+			<span id="accordionDiv">BLACK</span>
+			<span id="accordionDiv">BLUE</span>
+			<span id="accordionDiv">BROWN</span>
+			<span id="accordionDiv">GREEN</span>
+			<span id="accordionDiv">GOLD</span>
+			<span id="accordionDiv">GRAY</span>
+			<span id="accordionDiv">ORANGE</span>
+			<span id="accordionDiv">PINK</span>
+			<span id="accordionDiv">PURPLE</span>
+			<span id="accordionDiv">RED</span>
+			<span id="accordionDiv">SILVER</span>
+			<span id="accordionDiv">WHITE</span>
+		</div>
+
+		<h3 class="accordionTitle">CLOTHING SIZE</h3>
+		<div class="accordionContent">
+			<span id="accordionDiv">XXS</span>
+			<span id="accordionDiv">XS</span>
+			<span id="accordionDiv">S</span>
+			<span id="accordionDiv">M</span>
+			<span id="accordionDiv">L</span>
+			<span id="accordionDiv">XXL</span>
+			<span id="accordionDiv">28</span>
+			<span id="accordionDiv">30</span>
+			<span id="accordionDiv">32</span>
+			<span id="accordionDiv">34</span>
+			<span id="accordionDiv">36</span>
+			<span id="accordionDiv">38</span>
+		</div>
+		
+		<h3 class="accordionTitle">FOOTWEAR SIZE</h3>
+		<div class="accordionContent">
+			<span id="accordionDiv">40</span>
+			<span id="accordionDiv">41</span>
+			<span id="accordionDiv">42</span>
+			<span id="accordionDiv">43</span>
+			<span id="accordionDiv">44</span>
+			<span id="accordionDiv">45</span>
+			<span id="accordionDiv">US8</span>
+			<span id="accordionDiv">US8.5</span>
+			<span id="accordionDiv">US9</span>
+			<span id="accordionDiv">US9.5</span>
+			<span id="accordionDiv">US10</span>
+			<span id="accordionDiv">US10.5</span>
+		</div>
+
+	</div>
+</body>
+
+</html>

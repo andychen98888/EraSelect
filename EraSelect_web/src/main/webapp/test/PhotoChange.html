@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Photo Change</title>
+	<style>
+		#myPhotoChange {
+			width: 350px;
+			height: 360px;
+			border: 1px solid gray;
+			padding: 10px;
+			background: #666;
+		}
+
+		.mainPhoto {
+			width: 350px;
+			cursor: crosshair;
+		}
+
+		.smallPhoto {
+			width: 100px;
+			padding: 5px;
+			background: #333;
+			margin: 8px 1px;
+			cursor: pointer;
+		}
+
+		#enlargeDiv {
+			position: absolute;
+			left: 400px;
+			top: 50px;
+			width: 300px;
+			height: 300px;
+			/* width: 200px;
+			height: 200px; */
+			background-image: url(../images/city_Kyoto_l.jpg);/*1200X800*/
+			display: none;
+			border:1px solid gray;
+		}
+
+		.photoSelected {
+			background: #eee;
+		}
+
+		.photoHover {
+			background: silver;
+		}
+	</style>
+
+	<script type="text/javascript" src="../jquery.js"></script>
+	<script>
+		var smallPhoto,mainPhoto,enlargeDiv;
+		var photoIndex = 0;
+
+		$(document).ready(init);
+		function init() {
+			smallPhoto=$(".smallPhoto");
+			mainPhoto=$(".mainPhoto");
+			enlargeDiv=$("#enlargeDiv");
+			smallPhoto.click(smallPhotoClickHandler);
+			smallPhoto.hover(smallPhotoHoverHandler);
+			smallPhoto.each(function (index){
+				$(this).attr("photoIndex",index);
+			});
+			smallPhoto.eq(photoIndex).addClass("photoSelected");
+			var photoSrc = smallPhoto.eq(photoIndex).attr("src");
+			mainPhoto.attr("src",  photoSrc);
+			
+			mainPhoto.hover(mainPhotoHoverHandler);
+			mainPhoto.mousemove(mainPhotoMousemoveHandler);
+		}
+
+		function smallPhotoClickHandler(e) {
+			photoIndex = $(this).attr("photoIndex");
+			var photoSrc = $(this).attr("src");
+			mainPhoto.attr("src", photoSrc);
+			smallPhoto.removeClass("photoSelected");
+			$(this).removeClass("photoHover");
+			$(this).addClass("photoSelected");
+			var srcReplase = photoSrc.replace("_s","_l");
+			//console.log(srcReplase+" / "+photoSrc);
+			enlargeDiv.css("backgroundImage","url("+srcReplase+")");
+		}
+
+		function smallPhotoHoverHandler(e) {
+			if ($(this).attr("photoIndex") != photoIndex) {
+				$(this).toggleClass("photoHover");
+			}
+		}
+
+		function mainPhotoHoverHandler(){
+			enlargeDiv.fadeToggle(200);
+		}
+		
+		function mainPhotoMousemoveHandler(e){
+			//設定放大視窗寬度
+			var magnifyDivWidth = mainPhoto.width();
+			//設定放大圖片寬度
+			var enlargeDivWidth = enlargeDiv.width();
+			//計算可以移動的寬度範圍
+			var magnifyPhotoWidth = 1200;
+			//設定實際放大視窗寬度
+			var moveRangeX = magnifyPhotoWidth - enlargeDivWidth;
+			//計算需要放大的寬度比例
+			var magnifyScaleX = (moveRangeX / magnifyDivWidth);
+
+			//設定放大視窗高度
+			var magnifyDivHeight = mainPhoto.height();
+			//設定實際放大視窗高度
+			var enlargeDivHeight =  enlargeDiv.height();
+			//設定放大圖片高度
+			var magnifyPhotoHeight = 800;
+			//計算可以移動的高度範圍
+			var moveRangeY = magnifyPhotoHeight - enlargeDivHeight;
+			//計算需要放大的高度比例
+			var magnifyScaleY = (moveRangeY / magnifyDivHeight);
+
+			enlargeDiv.css("backgroundPosition",-e.offsetX * magnifyScaleX +"px "+ -e.offsetY * magnifyScaleY+"px");
+		}
+	</script>
+</head>
+
+<body>
+	<!--圖片更換外圍-->
+	<div id="myPhotoChange">
+		<!--大圖片元件 class="mainPhoto"-->
+		<img class="mainPhoto" src="../images/city_Kyoto_s.jpg" />
+		<!--縮圖外圍-->
+		<div>
+			<!--縮圖元件 class="smallPhoto"-->
+			<img class="smallPhoto" src="../images/city_Kyoto_s.jpg" />
+			<img class="smallPhoto" src="../images/city_Bangkok_s.jpg" />
+			<img class="smallPhoto" src="../images/city_Ottawa_s.jpg" />
+		</div>
+		<div id="enlargeDiv"></div>
+	</div>
+</body>
+
+</html>

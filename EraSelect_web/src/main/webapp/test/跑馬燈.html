@@ -1,0 +1,65 @@
+
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Timer</title>
+	<style>
+		#myDiv{
+			font-size: 1em;
+			width: 800px;
+			width: 2760px;
+		}
+		#outer{
+			border: 1px solid gray;
+			width: 300px;
+			width: 100%;
+			overflow: hidden; 
+		}
+		.inner{
+			float: left;
+			width: 230px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+<div id="outer">
+	<div id="myDiv">
+		<div class="inner"><a href="aaa">BUY ONE AND GET ONE FREE</a></div>
+		<div class="inner"><a href="bbb">FROM NOW ON</a></div>
+		<div class="inner"><a href="ccc">ON SALE</a></div>
+		<div class="inner"><a href="ddd">ONLY IN ERASELECT</a></div>
+		<div class="inner"><a href="aaa">BUY ONE AND GET ONE FREE</a></div>
+		<div class="inner"><a href="bbb">FROM NOW ON</a></div>
+		<div class="inner"><a href="ccc">ON SALE</a></div>
+		<div class="inner"><a href="ddd">ONLY IN ERASELECT</a></div>
+		<div class="inner"><a href="aaa">BUY ONE AND GET ONE FREE</a></div>
+		<div class="inner"><a href="bbb">FROM NOW ON</a></div>
+		<div class="inner"><a href="ccc">ON SALE</a></div>
+		<div class="inner"><a href="ddd">ONLY IN ERASELECT</a></div>
+	</div>
+</div>
+
+</body>
+<script>
+var index = 0;
+var myInterval = setInterval(timeoutHandler, 50);
+var myDiv = document.getElementById("myDiv");
+function timeoutHandler(){
+	index--;
+	myDiv.style.marginLeft = index*2 +"px"
+	if(index == -460) index = 0;
+}
+myDiv.addEventListener("mouseenter",enterHandler)
+function enterHandler(){
+	clearInterval(myInterval);
+}
+myDiv.addEventListener("mouseleave",leaveHandler)
+function leaveHandler(){
+	myInterval = setInterval(timeoutHandler, 50);
+}
+</script>
+
+</html>

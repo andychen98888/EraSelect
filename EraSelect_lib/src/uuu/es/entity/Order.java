@@ -1,0 +1,271 @@
+package uuu.es.entity;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Order { //網路交易憑證
+	private int id; 				//PKey ,Auto-increment	
+	private Customer member;		//required
+	private LocalDate createdDate;	//required
+	private LocalTime createdTime;	//required 時間日期分開宣告 可GROUP BY統計熱門時段分析
+	private int status;				//狀態欄位  0:新訂單, 1:已轉帳, 2:已付款, 3:已出貨 , 4:已到店, 5:已送達, 6:已完成
+									//10:取消, 11:退貨, 12:確認退貨, 13:退款
+	
+	private ShippingType shippingType;//required
+	private String shippingNote; 	//非必要 備註欄位 
+	private double shippingFee;		//required
+	
+	private PaymentType paymentType;//required
+	private String paymentNote;		//非必要 備註欄位 
+	private double paymentFee;		//required
+	
+	private String recipientName; 	//required 收件人
+	private String recipientEmail;	//required
+	private String recipientPhone;	//required
+	private String shippingAddress;	//required
+	
+	private Set<OrderItem> orderItemsSet = new HashSet<>(); //集合屬性不能直接加getter setter
+
+	
+	//=======orderItemsSet's getter==========
+	public Set<OrderItem> getOrderItemsSet() {
+		return new HashSet<>(orderItemsSet); //回傳副本
+	}
+	//[Source]->[Generate delegate method]
+	public int size() { //共N項
+		return orderItemsSet.size();
+	}
+
+	public int getTotalQuantity() { 
+		int sum = 0;
+		if(orderItemsSet!=null && orderItemsSet.size()>0) {
+			for(OrderItem orderItem:orderItemsSet) {
+				sum = sum + orderItem.getQuantity();
+			}
+		}
+		return sum;
+	}
+	
+	private double totalAmount; //紀錄來自SQL加總的總金額
+	public void setTotalAmount(double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+	
+	public double getTotalAmount() { //總金額
+		double sum = 0;
+		if(orderItemsSet!=null && orderItemsSet.size()>0) {
+			for(OrderItem orderItem:orderItemsSet) {
+				sum = sum + orderItem.getAmount();
+			}
+		}else {
+			return totalAmount;
+		}
+		return Math.round(sum); //用購物車getTotalAmount()一樣的
+	}
+	
+
+	//	public double MAX_WITHOUT_FEE = 2000;
+	public double getTotalAmountWithFee() {
+		double totalAmount = getTotalAmount();
+		
+//		if(getTotalAmount()>=MAX_WITHOUT_FEE) { //是否達免運
+//			return totalAmount;
+//		}
+		return totalAmount + shippingFee + paymentFee;
+	}
+	
+	//=======orderItemsSet's setter: add, (update, remove這裡不做)==========
+	public void add(OrderItem orderItem) { //for OrdersDAO 從資料庫查詢明細
+		if(orderItem ==null) throw new IllegalArgumentException("訂單明細不得為null");
+		orderItemsSet.add(orderItem);
+	}
+	
+	public void add(ShoppingCart cart) { //for CheckServlet 從購物車中的cartItem->orderItem
+		if(cart==null || cart.isEmpty()) {
+			throw new IllegalArgumentException("結帳時cart為空，無法建立訂單明細");
+		}
+		for(CartItem cartItem:cart.getCartItemsSet()) {
+			OrderItem orderItem = new OrderItem();
+			orderItem.setProduct(cartItem.getTheProduct());
+			orderItem.setColorName(cartItem.getColorName());
+			orderItem.setSpecName(cartItem.getSpecName());
+			orderItem.setPrice(cartItem.getPrice());
+			orderItem.setQuantity(cart.getQuantity(cartItem));
+			
+			orderItemsSet.add(orderItem);
+		}
+		
+	}
+	
+	
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Customer getMember() {
+		return member;
+	}
+
+	public void setMember(Customer member) {
+		this.member = member;
+	}
+
+	public LocalDate getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDate createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public LocalTime getCreatedTime() {
+		return createdTime;
+	}
+
+	public void setCreatedTime(LocalTime createdTime) {
+		this.createdTime = createdTime;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	// 將status數字轉為對應的中文
+	public String getStatusDescription() {
+		return getStatusDescription(this.status);
+	}
+
+	/**
+	 * 	將指定的status數字轉為對應的中文
+	 * @param status
+	 * @return status數字轉為對應的中文
+	 */
+	public String getStatusDescription(int status) {
+		if (status >= 0 && status < Status.values().length) {
+			return Status.values()[status].description;
+		} else {
+			return String.valueOf(status);
+		}
+	}
+	
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public ShippingType getShippingType() {
+		return shippingType;
+	}
+
+	public void setShippingType(ShippingType shippingType) {
+		this.shippingType = shippingType;
+	}
+
+	public String getShippingNote() {
+		return shippingNote;
+	}
+
+	public void setShippingNote(String shippingNote) {
+		this.shippingNote = shippingNote;
+	}
+
+	public double getShippingFee() {
+		return shippingFee;
+	}
+
+	public void setShippingFee(double shippingFee) {
+		this.shippingFee = shippingFee;
+	}
+
+	public PaymentType getPaymentType() {
+		return paymentType;
+	}
+
+	public void setPaymentType(PaymentType paymentType) {
+		this.paymentType = paymentType;
+	}
+
+	public String getPaymentNote() {
+		return paymentNote;
+	}
+
+	public void setPaymentNote(String paymentNote) {
+		this.paymentNote = paymentNote;
+	}
+
+	public double getPaymentFee() {
+		return paymentFee;
+	}
+
+	public void setPaymentFee(double paymentFee) {
+		this.paymentFee = paymentFee;
+	}
+
+	public String getRecipientName() {
+		return recipientName;
+	}
+
+	public void setRecipientName(String recipientName) {
+		this.recipientName = recipientName;
+	}
+
+	public String getRecipientEmail() {
+		return recipientEmail;
+	}
+
+	public void setRecipientEmail(String recipientEmail) {
+		this.recipientEmail = recipientEmail;
+	}
+
+	public String getRecipientPhone() {
+		return recipientPhone;
+	}
+
+	public void setRecipientPhone(String recipientPhone) {
+		this.recipientPhone = recipientPhone;
+	}
+
+	public String getShippingAddress() {
+		return shippingAddress;
+	}
+
+	public void setShippingAddress(String shippingAddress) {
+		this.shippingAddress = shippingAddress;
+	}
+	@Override
+	public String toString() {
+		return "Order [訂單編號=" + id + ", 訂購人=" + member.getName()
+				+ ", 訂購日期時間=" + createdDate +  createdTime 
+				+ ", 處理狀態=" + status 
+				+ ", \n 貨運方式/手續費/Note=" + shippingType.name() +"/" + shippingFee +"/" + shippingNote  
+				+ ", \n 付款方式/手續費/Note=" + paymentType +"/" + paymentFee +"/"+ paymentNote 
+				+ ", \n 收件人=" + recipientName + "," + recipientEmail+ ", " + recipientPhone
+				+ ", \n 收件地址=" + shippingAddress
+				+ ", \n 訂單明細=" + orderItemsSet 
+				+ ", \n 共=" + size() + "項,"+ getTotalQuantity() + "件"
+				+ ", \n 總金額=" + getTotalAmount() + ", 總金額(含手續費)="+ getTotalAmountWithFee() + "]";
+	}	
+	
+	private enum Status {
+		NEW("新訂單"), TRANSFORED("已轉帳"), PAID("已付款"), SHIPPED("已出貨"), ARRIVED("已到店"), SIGNED("已簽收"), COMPLETED("已完成");
+
+		private final String description;
+
+		private Status(String description) {
+			this.description = description;
+		}
+
+		private String getDescription() {
+			return description;
+		}
+	}
+	
+	
+	
+}

@@ -1,0 +1,155 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300..400&display=swap');
+
+@font-face{/* 標題字型 */
+	font-family:"my font";
+	src:url(assets/Chunkfive-webfont.ttf);
+	src:url(assets/BuxtonSketch.ttf);
+}
+/* =============header============= */
+.headerOuter{
+/* 	max-width: 100%; */
+/* 	min-width: 1024px; */
+	left: 0px;
+	top: 0px;
+	height: 50px;
+	background: rgb(235 235 235); /* darkgray silver rgb(255 255 255/var(--tw-bg-opacity))*/		
+	width: 100%;
+	opacity: 0.8;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+	position: absolute;
+	position: fixed;
+	
+	display: flex;
+	align-items: center;
+	
+	z-index: 1;
+	}
+
+header:hover{
+	opacity:1;
+}
+header img,#searchImg{
+	width:20px;
+}
+.menu2,.menu3{
+	font-size: 12px;
+	font-weight: 600; /*字體粗度*/
+}
+.menu1{
+	font-family:"my font";/* 標題字型 */
+	margin: 10px;
+}
+.menu1 a:hover{
+	color: #757575;
+}
+.menu2{
+	
+}
+.menu3{
+	margin-left: auto;
+}
+
+#saleLi{
+	color:rgb(174, 0, 0);
+}
+.stockShortage{
+	color:rgb(174, 0, 0);
+	font-weight: bold;
+	margin-left: 10px;
+}
+.stockSpan{
+	margin-left: 10px;
+	font-weight: bold;
+}
+/* =============header============= */
+body{
+	font-family: "Noto Sans TC", sans-serif; font-optical-sizing: auto; font-style: normal;
+ 	/*	font-family: Arial, "文泉驛正黑", "WenQuanYi Zen Hei", "儷黑 Pro", "LiHei Pro", "微軟正黑體", "Microsoft JhengHei", "標楷體", DFKai-SB, sans-serif;*/ 
+	margin: 60px auto 0px auto;
+	/* 	text-align: center 置中*/
+		}
+
+.welcomeSpan{
+	color: black;
+	color:orange;
+	}
+	
+article{ /* 讓body固定75%*/
+/**/ 	min-height: 80vh;  
+}
+footer{
+	text-align: center; /*置中*/
+	color: #757575;
+	font-size: 1em;
+	}
+
+/* 超連結css */
+a{
+	text-decoration: none;
+	padding-bottom: 2px;
+}
+a:link{
+	color: #757575;
+}
+a:visited{
+	color: #757575;
+}
+a:hover{
+	color: black;
+/* 	border-bottom: 1px solid black; */
+}
+a:active{
+	color: #757575;
+}
+ul{
+	margin: 0px auto;
+	padding: 1px;
+	list-style-type: none;
+	width: 100%;
+}
+li{
+	float: left;
+	padding: 4px 10px;
+	margin: 6px 0px;
+}
+
+/*=========登入.註冊按鈕===========*/
+.buttonStyled {
+	width: 150px;
+	border: 0;
+ 	line-height: 2.5;
+	padding: 0 20px;
+	font-size: 1rem;
+	text-align: center;
+	color: #fff; /* 字體白色 */
+	text-shadow: 1px 1px 1px #000;/* 字體影子 */
+	border-radius: 10px;/* border弧度 */
+	background-color: rgba(220, 0, 0, 1);		/* 紅色 */
+	background-color: rgba(128, 128, 128, 1);	/* 灰色 */
+	background-image: linear-gradient(
+    to top left,
+    rgba(0, 0, 0, 0.2),
+    rgba(0, 0, 0, 0.2) 30%,
+    rgba(0, 0, 0, 0)
+  );
+	box-shadow:
+	    inset 2px 2px 3px rgba(255, 255, 255, 0.6),
+	    inset -2px -2px 3px rgba(0, 0, 0, 0.6);
+}
+
+.buttonStyled:hover {
+	background-color: rgba(255, 0, 0, 1);		/* 紅色 */
+	background-color: rgba(163, 163, 163, 1);	/* 灰色 */
+	cursor: pointer;
+}
+
+.buttonStyled:active {
+	box-shadow:
+	    inset -2px -2px 3px rgba(255, 255, 255, 0.6),
+	    inset 2px 2px 3px rgba(0, 0, 0, 0.6);
+}
+/*=========登入.註冊按鈕===========*/
+	

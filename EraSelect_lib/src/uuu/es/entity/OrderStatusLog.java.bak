@@ -1,0 +1,5 @@
+package uuu.es.entity;
+
+public class OrderStatusLog {
+
+}

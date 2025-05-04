@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<style type="text/css">
+		/* HIDE RADIO */
+		.colorDiv input[type=radio] { /*複製過來前面要加class 不然其他的也會被改掉*/
+		  position: absolute;
+		  opacity: 0;
+		  width: 1px;
+		  height: 1px;
+		}
+		
+		/* IMAGE STYLES */
+		.colorDiv input[type=radio] + img {
+		  cursor: pointer;
+		}
+		
+		/* CHECKED STYLES */
+		.colorDiv input[type=radio]:checked + img {
+		  outline: 2px solid #f00;
+		}
+	</style>
+</head>
+<body>
+	<form>
+		<div class="colorDiv">
+			<label>顏色:</label>
+			<label>
+				<input type="radio" name="color" value="Rinsed Indigo" required >
+				<img alt="Rinsed Indigo" title="Rinsed Indigo" src="https://www.stussy.com/cdn/shop/files/116671_RIIN_1.jpg?v=1723052244&width=90">
+			</label>
+			<label>
+				<input type="radio" name="color" value="Medium Blue" required>
+				<img alt="Medium Blue" title="Medium Blue"src="https://www.stussy.com/cdn/shop/files/116671_MEDB_1_61b73b96-5005-4c91-a13a-df1c1c14d110.jpg?v=1722365864&width=90">
+			</label>
+		</div>
+		<div class="coloraDiv">
+			<label>顏色:</label>
+			<input type="radio" name="color" value="Rinsed Indigo" required><label>Rinsed Indigo</label>
+			<input type="radio" name="color" value="Medium Blue" required><label>Medium Blue</label>
+		</div>
+		<div>
+			<input type="submit" value="加入購物車">
+		</div>
+	</form>
+</body>
+</html>

@@ -1,0 +1,71 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>jQuery UI Example Page</title>
+	<link href="../jquery-ui-1.14.0.custom/jquery-ui.css" rel="stylesheet">	
+	<link rel="stylesheet" type="text/css" href="../style/es.css">
+	<script src="https://code.jquery.com/jquery-3.0.0.js" integrity="sha256-jrPLZ+8vDxt2FnE1zvZXCkCcebI/C8Dt5xyaQBjxQIo=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="../jquery-ui-1.14.0.custom/jquery-ui.js"></script>
+	
+	<script type="text/javascript">
+	$(document).ready(init);
+	function init(){
+		$("#myDialog").dialog({
+			modal: true, //true 只能在視窗動作 false 可在視窗外做任何動作
+			autoOpen: true, //自動開啟視窗畫面
+			show: true, //淡入
+			hide: true, //淡出
+			draggable: false, //可拖拉視窗
+			resizable: false, //可縮放視窗
+			width: 535,
+		});
+	}
+	
+	function signupHandler(){
+		$("#myDialog").dialog("close");
+	}
+
+	</script>
+	<style>
+		/*
+		CSS結構：
+			ui-dialog: 對話視窗的外框
+				ui-dialog-titlebar: 對話視窗的標題列外框
+					ui-dialog-title: 標題列文字
+					ui-dialog-titlebar-close: 標題列關閉按鈕
+				ui-dialog-content: 對話視窗內容的外框
+				ui-dialog-buttonpane: 對話視窗下方按鈕的外框
+					ui-dialog-buttonset: 對話視窗下方按鈕
+		*/
+		.ui-dialog-content img{
+			width: 500px;
+		}
+		.ui-dialog-title{
+			display: none;
+		}
+		.dialogInput,.dialogButton{
+			width: 490px;
+		}
+		.dialogButton{
+			padding: 0px 4px;
+			border-radius:0px;
+		}
+		#myDialog{
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	
+		<div id="myDialog" title="Title">
+			<img src="https://d3k81ch9hvuctc.cloudfront.net/company/RxtDGi/images/3be81e0e-64f7-4e9f-8102-9af2a563a93b.jpeg">
+			<h1>GET EARLY ACCESS</h1>
+			<p>SIGN UP TO BE THE FIRST TO SHOP OUR FUTURE RELEASES</p>
+			<p><input type="text" class="dialogInput" required></p>
+			<div class="dialogButton buttonStyled" onclick="signupHandler()">SIGN UP</div>
+		</div>
+	
+</body>
+</html>
